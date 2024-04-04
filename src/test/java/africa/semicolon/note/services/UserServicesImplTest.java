@@ -201,23 +201,6 @@ public class UserServicesImplTest {
         assertEquals("newBody", note.getBody());
         assertEquals(1, noteServices.getNoteFor("Bally").size());
     }
-//    @Test
-//    public void registerUser_login_logout_loginTest(){
-//        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
-//        registerUserRequest.setUsername("Bally");
-//        registerUserRequest.setPassword("password");
-//        userServices.registerUser(registerUserRequest);
-//
-//        LoginUserRequest loginUserRequest = new LoginUserRequest();
-//        loginUserRequest.setUsername("Bally");
-//        loginUserRequest.setPassword("password");
-//        userServices.login(loginUserRequest);
-//        userServices.logout("Bally");
-//        assertTrue(userServices.findByUser("Bally").isLocked());
-//
-//        userServices.login(loginUserRequest);
-//        assertFalse(userServices.findByUser("Bally").isLocked());
-//    }
     @Test
     public void registerUser_login_createNote_findNoteByAuthor(){
         RegisterUserRequest registerUserRequest = new RegisterUserRequest();
@@ -236,5 +219,27 @@ public class UserServicesImplTest {
         createNoteRequest.setAuthor("Bally");
         userServices.creatNote(createNoteRequest);
         assertEquals(userServices.findNoteByTitle("title").getTitle(),"title");
+    }
+
+    @Test
+    public void registerUser_login_createNote_deleteNote(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("Bally");
+        registerUserRequest.setPassword("password");
+        userServices.registerUser(registerUserRequest);
+
+        LoginUserRequest loginUserRequest = new LoginUserRequest();
+        loginUserRequest.setUsername("Bally");
+        loginUserRequest.setPassword("password");
+        userServices.login(loginUserRequest);
+
+        NoteRequest createNoteRequest = new NoteRequest();
+        createNoteRequest.setTitle("title");
+        createNoteRequest.setBody("body");
+        createNoteRequest.setAuthor("Bally");
+        userServices.creatNote(createNoteRequest);
+
+        userServices.deleteNote(createNoteRequest);
+        assertEquals(0, noteServices.getAllNote().size());
     }
 }

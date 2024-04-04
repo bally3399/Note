@@ -84,4 +84,15 @@ public class UserServicesImpl implements UserServices{
         }
         throw new NoteNotFound("not found");
     }
+    @Override
+    public String deleteNote(NoteRequest deleteNoteRequest) {
+        Note foundNote = noteRepository.findNoteByTitle(deleteNoteRequest.getTitle());
+
+        if (foundNote != null){
+            noteRepository.delete(foundNote);
+            return "Note Successfully Deleted";
+        }
+        throw new NoteNotFound("Note not found");
+
+    }
 }

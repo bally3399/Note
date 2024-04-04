@@ -21,5 +21,7 @@ public interface UserServices {
 
     NoteResponse updateNote(NoteRequest updateNoteRequest);
 
-    Note findNoteByTitle(java.lang.String title);
+    Note findNoteByTitle(String title);
+
+    String deleteNote(NoteRequest deleteNoteRequest);
 }
