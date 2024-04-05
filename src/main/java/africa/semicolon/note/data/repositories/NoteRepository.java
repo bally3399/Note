@@ -9,4 +9,5 @@ public interface NoteRepository extends MongoRepository<Note, String> {
     List<Note> findByAuthor(String username);
 
     Note findNoteByTitle(String title);
+
 }

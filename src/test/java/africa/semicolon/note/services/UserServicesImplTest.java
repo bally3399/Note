@@ -1,14 +1,10 @@
 package africa.semicolon.note.services;
 
 import africa.semicolon.note.data.repositories.UserRepository;
-import africa.semicolon.note.dtos.request.NoteRequest;
-import africa.semicolon.note.dtos.request.LoginUserRequest;
-import africa.semicolon.note.dtos.request.RegisterUserRequest;
+import africa.semicolon.note.dtos.request.*;
 import africa.semicolon.note.dtos.response.NoteResponse;
 import africa.semicolon.note.dtos.response.UserResponse;
 import africa.semicolon.note.exception.UserAlreadyExistException;
-import africa.semicolon.note.services.NoteServices;
-import africa.semicolon.note.services.UserServices;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +69,7 @@ public class UserServicesImplTest {
         loginUserRequest.setPassword("password");
         UserResponse response = userServices.login(loginUserRequest);
         assertEquals(1, userRepository.count());
-        assertEquals(response.getMessage(), "success");
+        assertEquals(response.getMessage(), "successful");
 
     }
     @Test
@@ -97,8 +93,8 @@ public class UserServicesImplTest {
         loginUserRequest1.setUsername("bim bim");
         loginUserRequest1.setPassword("password1");
         UserResponse response1 =userServices.login(loginUserRequest1);
-        assertEquals(response.getMessage(), "success");
-        assertEquals(response1.getMessage(), "success");
+        assertEquals(response.getMessage(), "successful");
+        assertEquals(response1.getMessage(), "successful");
 
     }
     @Test
@@ -112,7 +108,10 @@ public class UserServicesImplTest {
         loginUserRequest.setUsername("Bally");
         loginUserRequest.setPassword("password");
         userServices.login(loginUserRequest);
-        userServices.logout("Bally");
+        LogoutRequest logoutRequest = new LogoutRequest();
+        logoutRequest.setUsername("Bally");
+        userServices.logout(logoutRequest);
+
         assertTrue(userServices.findByUser("Bally").isLocked());
 
     }
@@ -134,7 +133,13 @@ public class UserServicesImplTest {
         createNoteRequest.setBody("body");
         createNoteRequest.setAuthor("Bally");
         userServices.creatNote(createNoteRequest);
-        assertEquals(1, noteServices.getNoteFor("Bally").size());
+
+        NoteRequest createNoteRequest1 = new NoteRequest();
+        createNoteRequest1.setTitle("title1");
+        createNoteRequest1.setBody("body1");
+        createNoteRequest1.setAuthor("Bally");
+        userServices.creatNote(createNoteRequest1);
+        assertEquals(2, noteServices.getNoteFor("Bally").size());
 
     }
 
@@ -192,13 +197,14 @@ public class UserServicesImplTest {
         createNoteRequest.setAuthor("Bally");
         userServices.creatNote(createNoteRequest);
 
-        NoteRequest updateNoteRequest = new NoteRequest();
-        updateNoteRequest.setTitle("newTitle");
-        updateNoteRequest.setBody("newBody");
-        updateNoteRequest.setAuthor("Bally");
+        UpdateNoteRequest updateNoteRequest = new UpdateNoteRequest();
+        updateNoteRequest.setTitle("title");
+        updateNoteRequest.setNewTitle("newTitle");
+
+
         NoteResponse note = userServices.updateNote(updateNoteRequest);
         assertEquals("newTitle", note.getTitle());
-        assertEquals("newBody", note.getBody());
+        assertEquals("body", note.getBody());
         assertEquals(1, noteServices.getNoteFor("Bally").size());
     }
     @Test

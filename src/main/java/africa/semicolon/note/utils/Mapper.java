@@ -20,8 +20,7 @@ public class Mapper {
     public static UserResponse map(User user){
         UserResponse response = new UserResponse();
         response.setUsername(user.getUsername());
-        response.setPassword(user.getPassword());
-        response.setMessage("success");
+        response.setMessage("successful");
         return response;
     }
     public static User map(LoginUserRequest loginUserRequest){
@@ -39,7 +38,6 @@ public class Mapper {
     }
     public static NoteResponse map(Note note){
         NoteResponse createNoteResponse = new NoteResponse();
-        createNoteResponse.setId(note.getId());
         createNoteResponse.setAuthor(note.getAuthor());
         createNoteResponse.setTitle(note.getTitle());
         createNoteResponse.setBody(note.getBody());
