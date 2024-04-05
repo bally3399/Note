@@ -80,15 +80,15 @@ public class UserController {
         }
     }
 
-    @GetMapping("/get")
-    public ResponseEntity<?> findNoteByTitle(String title){
-        try{
-            Note result = userServices.findNoteByTitle(title);
-            return new ResponseEntity<>(new NoteApiResponse(true, result), CREATED);
-        }catch (NoteAppException | InputMismatchException e){
-            return new ResponseEntity<>(new NoteApiResponse(false, e.getMessage()), BAD_REQUEST);
-        }
-    }
+//    @PostMapping("/get")
+//    public ResponseEntity<?> findNoteByTitle(@RequestBody String title){
+//        try{
+//            Note result = userServices.findNoteByTitle(title);
+//            return new ResponseEntity<>(new NoteApiResponse(true, result), CREATED);
+//        }catch (NoteAppException | InputMismatchException e){
+//            return new ResponseEntity<>(new NoteApiResponse(false, e.getMessage()), BAD_REQUEST);
+//        }
+//    }
 
 
 }

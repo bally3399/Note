@@ -82,7 +82,6 @@ public class UserServicesImpl implements UserServices{
         if(user != null) user.setLocked(false);
         Note note = map(createNoteRequest);
         NoteResponse response = map(note);
-
         noteRepository.save(note);
         return response;
     }
@@ -128,13 +127,11 @@ public class UserServicesImpl implements UserServices{
     public String deleteNote(NoteRequest deleteNoteRequest) {
         validate(deleteNoteRequest);
         Note foundNote = noteRepository.findNoteByTitle(deleteNoteRequest.getTitle());
-
         if (foundNote != null){
             noteRepository.delete(foundNote);
             return "Note Successfully Deleted";
         }
         throw new NoteNotFound("Note not found");
-
     }
     private static void validate(NoteRequest deleteNoteRequest) {
         if(deleteNoteRequest.getAuthor().isEmpty()) throw new InputMismatchException("Author not found");

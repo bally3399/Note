@@ -8,15 +8,10 @@ import africa.semicolon.note.dtos.response.UserResponse;
 
 public interface UserServices {
     UserResponse registerUser(RegisterUserRequest registerUserRequest);
-
     UserResponse login(LoginUserRequest loginUserRequest);
-
     UserResponse logout(LogoutRequest logoutRequest);
-
     User findByUser(String username);
-
     NoteResponse creatNote(NoteRequest createNoteRequest);
-
     NoteResponse updateNote(UpdateNoteRequest updateNoteRequest);
 
     Note findNoteByTitle(String title);

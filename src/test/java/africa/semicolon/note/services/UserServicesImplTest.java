@@ -41,7 +41,7 @@ public class UserServicesImplTest {
         userServices.registerUser(registerUserRequest);
 
         RegisterUserRequest registerUserRequest1 = new RegisterUserRequest();
-        registerUserRequest1.setUsername("bim bim");
+        registerUserRequest1.setUsername("bimbim");
         registerUserRequest1.setPassword("password1");
         userServices.registerUser(registerUserRequest1);
         assertEquals(2, userRepository.count());
@@ -85,12 +85,12 @@ public class UserServicesImplTest {
         UserResponse response = userServices.login(loginUserRequest);
 
         RegisterUserRequest registerUserRequest1 = new RegisterUserRequest();
-        registerUserRequest1.setUsername("bim bim");
+        registerUserRequest1.setUsername("bimbim");
         registerUserRequest1.setPassword("password1");
         userServices.registerUser(registerUserRequest1);
 
         LoginUserRequest loginUserRequest1 = new LoginUserRequest();
-        loginUserRequest1.setUsername("bim bim");
+        loginUserRequest1.setUsername("bimbim");
         loginUserRequest1.setPassword("password1");
         UserResponse response1 =userServices.login(loginUserRequest1);
         assertEquals(response.getMessage(), "successful");
@@ -162,19 +162,19 @@ public class UserServicesImplTest {
         userServices.creatNote(createNoteRequest);
 
         RegisterUserRequest registerUserRequest1 = new RegisterUserRequest();
-        registerUserRequest1.setUsername("bim bim");
+        registerUserRequest1.setUsername("bimbim");
         registerUserRequest1.setPassword("password1");
         userServices.registerUser(registerUserRequest1);
 
         LoginUserRequest loginUserRequest1 = new LoginUserRequest();
-        loginUserRequest1.setUsername("bim bim");
+        loginUserRequest1.setUsername("bimbim");
         loginUserRequest1.setPassword("password1");
         userServices.login(loginUserRequest1);
 
         NoteRequest createNoteRequest1 = new NoteRequest();
         createNoteRequest1.setTitle("title1");
         createNoteRequest1.setBody("body1");
-        createNoteRequest1.setAuthor("bim bim");
+        createNoteRequest1.setAuthor("bimbim");
         userServices.creatNote(createNoteRequest1);
         assertEquals(2, noteServices.getAllNote().size());
 
@@ -200,7 +200,8 @@ public class UserServicesImplTest {
         UpdateNoteRequest updateNoteRequest = new UpdateNoteRequest();
         updateNoteRequest.setTitle("title");
         updateNoteRequest.setNewTitle("newTitle");
-
+        updateNoteRequest.setBody("body");
+        updateNoteRequest.setAuthor("Bally");
 
         NoteResponse note = userServices.updateNote(updateNoteRequest);
         assertEquals("newTitle", note.getTitle());

@@ -1,31 +1,40 @@
 package africa.semicolon.note.services;
 
 import africa.semicolon.note.data.model.Note;
+import africa.semicolon.note.data.model.User;
 import africa.semicolon.note.data.repositories.NoteRepository;
+import africa.semicolon.note.data.repositories.UserRepository;
+import africa.semicolon.note.dtos.request.NoteRequest;
+import africa.semicolon.note.dtos.response.NoteResponse;
 import africa.semicolon.note.exception.NoteNotFound;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.InputMismatchException;
 import java.util.List;
 
+import static africa.semicolon.note.utils.Mapper.map;
+
 @Service
+@AllArgsConstructor
 public class NoteServicesImpl implements NoteServices{
-    @Autowired
-    private NoteRepository repository;
+    private final NoteRepository notes;
+    private final UserRepository users;
     @Override
     public List<Note> getNoteFor(String username) {
-        List<Note> notes = repository.findByAuthor(username);
-        if(notes.isEmpty()) throw new NoteNotFound("note not found");
-        return notes;
+        List<Note> userNotes = notes.findByAuthor(username);
+        if(userNotes.isEmpty()) throw new NoteNotFound("note not found");
+        return userNotes;
     }
 
     @Override
     public List<Note> getAllNote() {
-        return repository.findAll();
+        return notes.findAll();
     }
 
     @Override
     public void deleteAll() {
-        repository.deleteAll();
+        notes.deleteAll();
     }
+
 }
