@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.InputMismatchException;
+
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class UserServicesImplTest {
@@ -249,4 +251,221 @@ public class UserServicesImplTest {
         userServices.deleteNote(createNoteRequest);
         assertEquals(0, noteServices.getAllNote().size());
     }
+    @Test
+    public void testWhenUserInputEmptyStringAsUserName(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("");
+        registerUserRequest.setPassword("password");
+        try {
+            userServices.registerUser(registerUserRequest);
+        }catch(InputMismatchException e){
+            assertEquals(e.getMessage(), "Invalid Input");
+        }
+
+    }
+
+    @Test
+    public void testWhenUserInputEmptyStringAsPassword(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("bally");
+        registerUserRequest.setPassword("");
+        try {
+            userServices.registerUser(registerUserRequest);
+        }catch(InputMismatchException e){
+            assertEquals(e.getMessage(), "Invalid Password provide a Password");
+        }
+    }
+
+    @Test
+    public void testWhenUSerInputEmptyStringAsTitle(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("Bally");
+        registerUserRequest.setPassword("password");
+        userServices.registerUser(registerUserRequest);
+
+        LoginUserRequest loginUserRequest = new LoginUserRequest();
+        loginUserRequest.setUsername("Bally");
+        loginUserRequest.setPassword("password");
+        userServices.login(loginUserRequest);
+
+        NoteRequest createNoteRequest = new NoteRequest();
+        createNoteRequest.setTitle("");
+        createNoteRequest.setBody("body");
+        createNoteRequest.setAuthor("Bally");
+        try {
+            userServices.creatNote(createNoteRequest);
+        }catch(InputMismatchException e){
+            assertEquals(e.getMessage(), "Title not found");
+        }
+    }
+
+    @Test
+    public void testWhenUserInputEmptyStringAsBodyOfNote(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("Bally");
+        registerUserRequest.setPassword("password");
+        userServices.registerUser(registerUserRequest);
+
+        LoginUserRequest loginUserRequest = new LoginUserRequest();
+        loginUserRequest.setUsername("Bally");
+        loginUserRequest.setPassword("password");
+        userServices.login(loginUserRequest);
+
+        NoteRequest createNoteRequest = new NoteRequest();
+        createNoteRequest.setTitle("title");
+        createNoteRequest.setBody("");
+        createNoteRequest.setAuthor("Bally");
+        try {
+            userServices.creatNote(createNoteRequest);
+        }catch(InputMismatchException e){
+            assertEquals(e.getMessage(), "Body not found");
+        }
+
+    }
+    @Test
+    public void testWhenUserInputEmptyStringAsAuthorOfNote(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("Bally");
+        registerUserRequest.setPassword("password");
+        userServices.registerUser(registerUserRequest);
+
+        LoginUserRequest loginUserRequest = new LoginUserRequest();
+        loginUserRequest.setUsername("Bally");
+        loginUserRequest.setPassword("password");
+        userServices.login(loginUserRequest);
+
+        NoteRequest createNoteRequest = new NoteRequest();
+        createNoteRequest.setTitle("title");
+        createNoteRequest.setBody("body");
+        createNoteRequest.setAuthor("");
+        try {
+            userServices.creatNote(createNoteRequest);
+        }catch(InputMismatchException e){
+            assertEquals(e.getMessage(), "Invalid Input");
+        }
+    }
+
+    @Test
+    public void testWhenUserInputInvalidName(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("B a l l y");
+        registerUserRequest.setPassword("password");
+        try {
+            userServices.registerUser(registerUserRequest);
+        }catch(InputMismatchException e){
+            assertEquals(e.getMessage(), "Invalid Input");
+        }
+    }
+
+    @Test
+    public void testWhenUserInputInvalidPassword(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("Bally");
+        registerUserRequest.setPassword("p a s s w o r d");
+        try {
+            userServices.registerUser(registerUserRequest);
+        }catch(InputMismatchException e){
+            assertEquals(e.getMessage(), "Invalid Password provide a Password");
+        }
+    }
+
+    @Test
+    public void testWhenUserInputInvalidTitle(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("Bally");
+        registerUserRequest.setPassword("p a s s w o r d");
+        try {
+            userServices.registerUser(registerUserRequest);
+        }catch(InputMismatchException e){
+            assertEquals(e.getMessage(), "Invalid Password provide a Password");
+        }
+    }
+    @Test
+    public void testThatWhenUserEnter(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("Bally");
+        registerUserRequest.setPassword("password");
+        userServices.registerUser(registerUserRequest);
+
+        LoginUserRequest loginUserRequest = new LoginUserRequest();
+        loginUserRequest.setUsername("1 2 3 4 5");
+        loginUserRequest.setPassword("password");
+        try {
+            userServices.login(loginUserRequest);
+        }catch(InputMismatchException e){
+            assertEquals(e.getMessage(),"Invalid Input");
+        }
+    }
+
+    @Test
+    public void registerUserFindUserByUsernameTest(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("Bally");
+        registerUserRequest.setPassword("password");
+        userServices.registerUser(registerUserRequest);
+        assertEquals("Bally", userServices.findByUser("Bally").getUsername());
+    }
+
+    @Test
+    public void registerUser_login_createNote_logout(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("Bally");
+        registerUserRequest.setPassword("password");
+        userServices.registerUser(registerUserRequest);
+
+        LoginUserRequest loginUserRequest = new LoginUserRequest();
+        loginUserRequest.setUsername("Bally");
+        loginUserRequest.setPassword("password");
+        userServices.login(loginUserRequest);
+
+        NoteRequest createNoteRequest = new NoteRequest();
+        createNoteRequest.setTitle("title");
+        createNoteRequest.setBody("body");
+        createNoteRequest.setAuthor("Bally");
+        userServices.creatNote(createNoteRequest);
+
+        LogoutRequest logoutRequest = new LogoutRequest();
+        logoutRequest.setUsername("Bally");
+        userServices.logout(logoutRequest);
+
+        assertTrue(userServices.findByUser("Bally").isLocked());
+    }
+    @Test
+    public void registerTwoUsers_login_createNoteForUser_deleteAllTest(){
+        RegisterUserRequest registerUserRequest = new RegisterUserRequest();
+        registerUserRequest.setUsername("Bally");
+        registerUserRequest.setPassword("password");
+        userServices.registerUser(registerUserRequest);
+
+        LoginUserRequest loginUserRequest = new LoginUserRequest();
+        loginUserRequest.setUsername("Bally");
+        loginUserRequest.setPassword("password");
+        userServices.login(loginUserRequest);
+
+        NoteRequest createNoteRequest = new NoteRequest();
+        createNoteRequest.setTitle("title");
+        createNoteRequest.setBody("body");
+        createNoteRequest.setAuthor("Bally");
+        userServices.creatNote(createNoteRequest);
+
+        RegisterUserRequest registerUserRequest1 = new RegisterUserRequest();
+        registerUserRequest1.setUsername("bimbim");
+        registerUserRequest1.setPassword("password1");
+        userServices.registerUser(registerUserRequest1);
+
+        LoginUserRequest loginUserRequest1 = new LoginUserRequest();
+        loginUserRequest1.setUsername("bimbim");
+        loginUserRequest1.setPassword("password1");
+        userServices.login(loginUserRequest1);
+
+        NoteRequest createNoteRequest1 = new NoteRequest();
+        createNoteRequest1.setTitle("title1");
+        createNoteRequest1.setBody("body1");
+        createNoteRequest1.setAuthor("bimbim");
+        userServices.creatNote(createNoteRequest1);
+        noteServices.deleteAll();
+        assertEquals(0, noteServices.getAllNote().size());
+
+    }
+
 }
