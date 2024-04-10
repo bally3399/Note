@@ -6,6 +6,8 @@ import africa.semicolon.note.dtos.request.*;
 import africa.semicolon.note.dtos.response.NoteResponse;
 import africa.semicolon.note.dtos.response.UserResponse;
 
+import java.util.List;
+
 public interface UserServices {
     UserResponse registerUser(RegisterUserRequest registerUserRequest);
     UserResponse login(LoginUserRequest loginUserRequest);
@@ -17,4 +19,6 @@ public interface UserServices {
     Note findNoteByTitle(String title);
 
     String deleteNote(NoteRequest deleteNoteRequest);
+
+    List<Note> getAllNote();
 }

@@ -7,5 +7,5 @@ public class UpdateNoteRequest {
     private String title;
     private String newTitle;
     private String body;
-    private String Author;
+    private String author;
 }

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.InputMismatchException;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -80,15 +81,15 @@ public class UserController {
         }
     }
 
-//    @PostMapping("/get")
-//    public ResponseEntity<?> findNoteByTitle(@RequestBody String title){
-//        try{
-//            Note result = userServices.findNoteByTitle(title);
-//            return new ResponseEntity<>(new NoteApiResponse(true, result), CREATED);
-//        }catch (NoteAppException | InputMismatchException e){
-//            return new ResponseEntity<>(new NoteApiResponse(false, e.getMessage()), BAD_REQUEST);
-//        }
-//    }
+    @GetMapping("/get")
+    public ResponseEntity<?> getAllTask(){
+        try{
+            List<Note> result = userServices.getAllNote();
+            return new ResponseEntity<>(new NoteApiResponse(true, result), CREATED);
+        }catch (NoteAppException e){
+            return new ResponseEntity<>(new NoteApiResponse(false, e.getMessage()), BAD_REQUEST);
+        }
+      }
 
 
 }

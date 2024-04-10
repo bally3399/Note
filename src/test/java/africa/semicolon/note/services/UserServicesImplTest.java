@@ -114,7 +114,7 @@ public class UserServicesImplTest {
         logoutRequest.setUsername("Bally");
         userServices.logout(logoutRequest);
 
-        assertTrue(userServices.findByUser("Bally").isLocked());
+        assertTrue(userServices.findByUser("Bally").isLoggedIn());
 
     }
 
@@ -381,7 +381,7 @@ public class UserServicesImplTest {
         }
     }
     @Test
-    public void testThatWhenUserEnter(){
+    public void testThatWhenUserEnterIntegerAsUsername(){
         RegisterUserRequest registerUserRequest = new RegisterUserRequest();
         registerUserRequest.setUsername("Bally");
         registerUserRequest.setPassword("password");
@@ -428,7 +428,7 @@ public class UserServicesImplTest {
         logoutRequest.setUsername("Bally");
         userServices.logout(logoutRequest);
 
-        assertTrue(userServices.findByUser("Bally").isLocked());
+        assertTrue(userServices.findByUser("Bally").isLoggedIn());
     }
     @Test
     public void registerTwoUsers_login_createNoteForUser_deleteAllTest(){

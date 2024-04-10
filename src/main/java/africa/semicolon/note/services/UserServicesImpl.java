@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.InputMismatchException;
+import java.util.List;
 
 import static africa.semicolon.note.utils.Mapper.map;
 
@@ -50,7 +51,7 @@ public class UserServicesImpl implements UserServices {
         validateLogin(loginUserRequest);
         User newUser = map(loginUserRequest);
         UserResponse response = map(newUser);
-        newUser.setLocked(false);
+        newUser.setLoggedIn(true);
         if (!newUser.getPassword().equals(loginUserRequest.getPassword()))
             throw new IncorrectPassword("Incorrect password");
         return response;
@@ -68,7 +69,7 @@ public class UserServicesImpl implements UserServices {
         if (user == null) throw new IncorrectPassword("Username is not valid");
         UserResponse userResponse = new UserResponse();
         userResponse.setMessage("Logout successful");
-        user.setLocked(true);
+        user.setLoggedIn(false);
         return userResponse;
     }
 
@@ -79,6 +80,9 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public NoteResponse creatNote(NoteRequest createNoteRequest) {
+        User user = userRepository.findByUsername(createNoteRequest.getAuthor());
+        if(!user.isLoggedIn()) throw new NoteNotFound("You have to login first");
+        user.setLoggedIn(false);
         return noteServices.createNote(createNoteRequest);
     }
 
@@ -103,5 +107,10 @@ public class UserServicesImpl implements UserServices {
     public String deleteNote(NoteRequest deleteNoteRequest) {
         return noteServices.deleteNote(deleteNoteRequest);
     }
+    @Override
+    public List<Note> getAllNote(){
+        return noteServices.getAllNote();
+    }
 
 }
+

@@ -20,47 +20,40 @@ import static africa.semicolon.note.utils.Mapper.map;
 @Service
 @AllArgsConstructor
 public class NoteServicesImpl implements NoteServices{
-    private final NoteRepository notes;
-    private final UserRepository userRepository;
-
+    private final NoteRepository noteRepository;
     @Override
     public List<Note> getNoteFor(String username) {
-        List<Note> userNotes = notes.findByAuthor(username);
+        List<Note> userNotes = noteRepository.findByAuthor(username);
         if(userNotes.isEmpty()) throw new NoteNotFound("note not found");
         return userNotes;
     }
 
     @Override
     public List<Note> getAllNote() {
-        return notes.findAll();
+        return noteRepository.findAll();
     }
     @Override
     public void deleteAll() {
-        notes.deleteAll();
+        noteRepository.deleteAll();
     }
 
     @Override
     public NoteResponse createNote(NoteRequest createNoteRequest) {
         ValidateNote(createNoteRequest);
-        User user = userRepository.findByUsername(createNoteRequest.getAuthor());
-        for(Note note : notes.findAll()){
+        for(Note note : noteRepository.findAll()){
             if(note.getTitle().equals(createNoteRequest.getTitle())) throw new NoteNotFound("Note Title Already Exist");
         }
-        if(user != null) user.setLocked(false);
         Note note = map(createNoteRequest);
         NoteResponse response = map(note);
-        notes.save(note);
+        noteRepository.save(note);
         return response;
     }
 
     @Override
     public NoteResponse updateNote(UpdateNoteRequest updateNoteRequest) {
         validateUpdate(updateNoteRequest);
-        Note foundNote = notes.findNoteByTitle(updateNoteRequest.getTitle());
-        if (updateNoteRequest.getNewTitle() != null) foundNote.setTitle(updateNoteRequest.getNewTitle());
-        if (updateNoteRequest.getAuthor() != null) foundNote.setAuthor(updateNoteRequest.getAuthor());
-        if (updateNoteRequest.getBody() != null) foundNote.setBody(updateNoteRequest.getBody());
-        Note savedNote = notes.save(foundNote);
+        Note foundNote = noteRepository.findNoteByTitle(updateNoteRequest.getTitle());
+        Note savedNote = noteRepository.save(foundNote);
         NoteResponse noteResponse = new NoteResponse();
         noteResponse.setTitle(savedNote.getTitle());
         noteResponse.setBody(savedNote.getBody());
@@ -72,9 +65,9 @@ public class NoteServicesImpl implements NoteServices{
     @Override
     public String deleteNote(NoteRequest deleteNoteRequest) {
         validate(deleteNoteRequest);
-        Note foundNote = notes.findNoteByTitle(deleteNoteRequest.getTitle());
+        Note foundNote = noteRepository.findNoteByTitle(deleteNoteRequest.getTitle());
         if (foundNote != null){
-            notes.delete(foundNote);
+            noteRepository.delete(foundNote);
             return "Note Successfully Deleted";
         }
         throw new NoteNotFound("Note not found");
