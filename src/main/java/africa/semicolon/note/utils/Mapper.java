@@ -23,12 +23,6 @@ public class Mapper {
         response.setMessage("successful");
         return response;
     }
-    public static User map(LoginUserRequest loginUserRequest){
-        User user = new User();
-        user.setPassword(loginUserRequest.getPassword());
-        user.setUsername(loginUserRequest.getUsername());
-        return user;
-    }
     public static Note map(NoteRequest createNoteRequest){
         Note note = new Note();
         note.setTitle(createNoteRequest.getTitle());

@@ -55,7 +55,7 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<?> Create(@RequestBody NoteRequest noteRequest){
         try{
-            NoteResponse result = userServices.creatNote(noteRequest);
+            NoteResponse result = userServices.createNote(noteRequest);
             return new ResponseEntity<>(new NoteApiResponse(true, result), CREATED);
         }catch (NoteAppException | InputMismatchException e){
             return new ResponseEntity<>(new NoteApiResponse(false, e.getMessage()), BAD_REQUEST);

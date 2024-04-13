@@ -1,9 +1,7 @@
 package africa.semicolon.note.services;
 
 import africa.semicolon.note.data.model.Note;
-import africa.semicolon.note.data.model.User;
 import africa.semicolon.note.data.repositories.NoteRepository;
-import africa.semicolon.note.data.repositories.UserRepository;
 import africa.semicolon.note.dtos.request.NoteRequest;
 import africa.semicolon.note.dtos.request.UpdateNoteRequest;
 import africa.semicolon.note.dtos.response.NoteResponse;
@@ -63,7 +61,7 @@ public class NoteServicesImpl implements NoteServices{
     }
 
     @Override
-    public String deleteNote(NoteRequest deleteNoteRequest) {
+    public String  deleteNote(NoteRequest deleteNoteRequest) {
         validate(deleteNoteRequest);
         Note foundNote = noteRepository.findNoteByTitle(deleteNoteRequest.getTitle());
         if (foundNote != null){
@@ -72,6 +70,17 @@ public class NoteServicesImpl implements NoteServices{
         }
         throw new NoteNotFound("Note not found");
     }
+
+    @Override
+    public Note findNoteByTitle(String title) {
+        for (Note note : noteRepository.findAll()) {
+            if (note.getTitle().equals(title)) {
+                return note;
+            }
+        }
+        throw new NoteNotFound("not found");
+    }
+
     private static void validate(NoteRequest deleteNoteRequest) {
         if(deleteNoteRequest.getAuthor().trim().isEmpty()) throw new InputMismatchException("Invalid Input");
         if(deleteNoteRequest.getTitle().trim().isEmpty())throw new InputMismatchException("Title not found");

@@ -2,7 +2,6 @@ package africa.semicolon.note.services;
 
 import africa.semicolon.note.data.model.Note;
 import africa.semicolon.note.data.model.User;
-import africa.semicolon.note.data.repositories.NoteRepository;
 import africa.semicolon.note.data.repositories.UserRepository;
 import africa.semicolon.note.dtos.request.*;
 import africa.semicolon.note.dtos.response.NoteResponse;
@@ -22,8 +21,6 @@ import static africa.semicolon.note.utils.Mapper.map;
 public class UserServicesImpl implements UserServices {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private NoteRepository noteRepository;
     @Autowired
     private NoteServices noteServices;
 
@@ -49,11 +46,11 @@ public class UserServicesImpl implements UserServices {
     @Override
     public UserResponse login(LoginUserRequest loginUserRequest) {
         validateLogin(loginUserRequest);
-        User newUser = map(loginUserRequest);
+        User newUser = userRepository.findByUsername(loginUserRequest.getUsername());
         UserResponse response = map(newUser);
+        if (!newUser.getPassword().equals(loginUserRequest.getPassword())) throw new IncorrectPassword("Incorrect password");
         newUser.setLoggedIn(true);
-        if (!newUser.getPassword().equals(loginUserRequest.getPassword()))
-            throw new IncorrectPassword("Incorrect password");
+        //userRepository.save(newUser);
         return response;
     }
 
@@ -79,10 +76,11 @@ public class UserServicesImpl implements UserServices {
     }
 
     @Override
-    public NoteResponse creatNote(NoteRequest createNoteRequest) {
+    public NoteResponse createNote(NoteRequest createNoteRequest) {
         User user = userRepository.findByUsername(createNoteRequest.getAuthor());
+        if(user == null) throw new NoteNotFound("Note not found");
+        user.setLoggedIn(true);
         if(!user.isLoggedIn()) throw new NoteNotFound("You have to login first");
-        user.setLoggedIn(false);
         return noteServices.createNote(createNoteRequest);
     }
 
@@ -95,12 +93,7 @@ public class UserServicesImpl implements UserServices {
 
     @Override
     public Note findNoteByTitle(String title) {
-        for (Note note : noteRepository.findAll()) {
-            if (note.getTitle().equals(title)) {
-                return note;
-            }
-        }
-        throw new NoteNotFound("not found");
+        return noteServices.findNoteByTitle(title);
     }
 
     @Override

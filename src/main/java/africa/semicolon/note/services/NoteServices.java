@@ -19,4 +19,6 @@ public interface NoteServices {
     NoteResponse updateNote(UpdateNoteRequest updateNoteRequest);
 
     String deleteNote(NoteRequest deleteNoteRequest);
+
+    Note findNoteByTitle(String title);
 }

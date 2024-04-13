@@ -13,7 +13,7 @@ public interface UserServices {
     UserResponse login(LoginUserRequest loginUserRequest);
     UserResponse logout(LogoutRequest logoutRequest);
     User findByUser(String username);
-    NoteResponse creatNote(NoteRequest createNoteRequest);
+    NoteResponse createNote(NoteRequest createNoteRequest);
     NoteResponse updateNote(UpdateNoteRequest updateNoteRequest);
 
     Note findNoteByTitle(String title);
