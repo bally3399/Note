@@ -10,10 +10,15 @@ import java.util.List;
 
 public interface UserServices {
     UserResponse registerUser(RegisterUserRequest registerUserRequest);
+
     UserResponse login(LoginUserRequest loginUserRequest);
+
     UserResponse logout(LogoutRequest logoutRequest);
+
     User findByUser(String username);
+
     NoteResponse createNote(NoteRequest createNoteRequest);
+
     NoteResponse updateNote(UpdateNoteRequest updateNoteRequest);
 
     Note findNoteByTitle(String title);

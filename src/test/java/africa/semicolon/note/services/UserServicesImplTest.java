@@ -465,7 +465,6 @@ public class UserServicesImplTest {
         userServices.createNote(createNoteRequest1);
         noteServices.deleteAll();
         assertEquals(0, noteServices.getAllNote().size());
-
     }
 
 }

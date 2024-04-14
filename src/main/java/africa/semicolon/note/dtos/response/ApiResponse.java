@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class NoteApiResponse {
+public class ApiResponse {
     boolean isSuccessful;
     Object NoteResponse;
 }
